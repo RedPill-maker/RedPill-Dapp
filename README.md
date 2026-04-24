@@ -1,4 +1,5 @@
-# <p align="center"><img src="./RedPill_logo.png" width="64px"/></p> <p align="center"> RedPill </p>
+# <p align="center"><img width="64" height="64" alt="RedPill_logo" src="https://github.com/user-attachments/assets/e49f1210-6956-4c47-9b06-2c33032f6d07" />
+</p> <p align="center"> RedPill </p>
 
 > **Decentralized Content Publishing. Truly Data Sovereign. No Gatekeepers.**
 
@@ -8,7 +9,8 @@ RedPill is a desktop-native content publishing system that bridges the gap betwe
 
 ## Architecture
 
-![RedPill Architecture](./RedPill_architecture.png)
+![RedPill Architecture](https://github.com/user-attachments/assets/5e11ad83-1c78-4d1c-8cc1-22d258ddb2b2)
+
 
 ## ✨ Features
 
