@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RedPill</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+      background-color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      color: white;
+    }
+
+    .container {
+      z-index: 2;
+      text-align: center;
+      max-width: 500px;
+      padding: 40px;
+    }
+
+    .logo {
+      width: 128px;
+      height: 128px;
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .status-list {
+      width: 320px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      padding: 6px 12px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .status-item:last-child {
+      border-bottom: none;
+    }
+
+    .status-name {
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .status-text {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .status-success {
+      color: #4ade80;
+    }
+
+    .status-error {
+      color: #f87171;
+    }
+
+    .error-details {
+      background: rgba(248, 113, 113, 0.2);
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      text-align: left;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .error-details.show {
+      display: block;
+    }
+
+    .error-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .retry-button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: all 0.2s;
+    }
+
+    .retry-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* Wrench button - bottom left corner */
+    .wrench-btn {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      width: 28px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      transition: background 0.2s;
+    }
+
+    .wrench-btn:hover {
+      background: rgba(255, 255, 255, 0.18);
+    }
+
+    .wrench-btn svg {
+      width: 15px;
+      height: 15px;
+      opacity: 0.5;
+    }
+
+    /* Full-screen log overlay */
+    .log-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.92);
+      z-index: 200;
+      flex-direction: column;
+    }
+
+    .log-overlay.show {
+      display: flex;
+    }
+
+    .log-overlay-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      flex-shrink: 0;
+    }
+
+    .log-overlay-title {
+      font-size: 13px;
+      font-weight: 600;
+      opacity: 0.7;
+      letter-spacing: 0.05em;
+    }
+
+    .log-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .log-close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .logs-container {
+      flex: 1;
+      padding: 12px 16px;
+      overflow-y: auto;
+      font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+      font-size: 11px;
+      text-align: left;
+      line-height: 1.6;
+    }
+
+    .log-entry {
+      margin-bottom: 2px;
+      opacity: 0.85;
+      word-break: break-all;
+    }
+
+    .log-entry.kubo {
+      color: #93c5fd;
+    }
+
+    .log-entry.dbsync {
+      color: #a78bfa;
+    }
+
+    .log-entry.system {
+      color: #86efac;
+    }
+
+    .log-entry.error {
+      color: #fca5a5;
+    }
+
+    .logs-container::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .logs-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .logs-container::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+    .build-mark {
+      font-size: 12px;
+      opacity: 0.4;
+    }
+    /* animation */
+    #canvas-container {
+      width: 100%;
+      height: 100%;
+      filter: blur(60px);
+      transform: scale(1.2);
+      /* Slightly enlarged to prevent background color from showing through blurred edges */
+    }
+
+    canvas {
+      display: block;
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="chaosCanvas"></canvas>
+  <div class="container">
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="106px" height="106px">
+      <path fill-rule="evenodd" stroke="rgb(0, 0, 0)" stroke-width="0px" stroke-dasharray="0, 0" stroke-linecap="butt"
+        stroke-linejoin="miter" fill="rgb(225, 34, 34)"
+        d="M68.81,6.977 C68.69,6.989 68.58,7.1 68.46,7.13 L68.45,7.13 L6.946,68.112 L6.946,68.113 C-1.447,76.546 -1.344,90.279 7.187,98.811 C15.718,107.343 29.452,107.446 37.885,99.52 L37.907,99.73 L99.6,37.973 L98.985,37.952 C98.997,37.940 99.9,37.929 99.21,37.917 C107.451,29.487 107.359,15.726 98.815,7.183 C90.272,-1.360 76.511,-1.452 68.81,6.977 ZM40.854,40.869 C40.845,40.879 40.836,40.888 40.827,40.898 L10.632,71.92 L10.632,71.92 C4.62,77.693 4.143,88.442 10.821,95.119 C17.498,101.797 28.247,101.878 34.848,95.308 L34.865,95.324 C49.27,81.278 51.109,79.312 65.271,65.266 C65.204,65.206 65.137,65.146 65.71,65.86 C53.131,54.316 40.881,40.843 40.854,40.869 ZM38.676,77.926 C38.674,77.927 38.673,77.929 38.671,77.931 L38.671,77.931 C29.428,87.405 28.695,89.798 23.141,88.507 C23.141,88.507 23.141,88.507 23.141,88.507 C21.455,88.173 19.814,89.285 19.471,90.994 C19.129,92.702 20.216,94.360 21.900,94.702 L21.899,94.706 C23.537,95.246 25.210,95.447 26.883,95.242 C30.807,94.762 33.291,92.255 35.325,90.217 C36.342,89.199 41.426,84.152 43.141,82.401 C43.140,82.400 43.139,82.399 43.138,82.398 C43.140,82.396 43.142,82.395 43.143,82.393 C44.361,81.176 44.347,79.189 43.114,77.955 C41.880,76.722 39.893,76.708 38.676,77.926 ZM69.983,25.79 C69.985,25.77 69.986,25.75 69.988,25.73 L69.988,25.73 C79.231,15.600 79.964,13.206 85.518,14.497 C85.518,14.497 85.518,14.497 85.518,14.497 C87.203,14.831 88.845,13.719 89.188,12.11 C89.530,10.302 88.443,8.644 86.759,8.303 L86.760,8.298 C85.122,7.758 83.448,7.557 81.776,7.762 C77.852,8.243 75.368,10.749 73.334,12.787 C72.317,13.805 67.233,18.852 65.518,20.603 C65.519,20.604 65.520,20.605 65.521,20.606 C65.519,20.608 65.517,20.610 65.516,20.611 C64.298,21.828 64.312,23.815 65.545,25.49 C66.779,26.283 68.766,26.296 69.983,25.79 Z" />
+    </svg>
+    <div class="title">RedPill</div>
+    <!-- <div class="build-mark">b:3</div> -->
+    <div class="status-list">
+      <div class="status-item" id="kubo-status">
+        <span class="status-name">IPFS Node</span>
+        <div class="status-indicator">
+          <div class="spinner"></div>
+          <span class="status-text">starting...</span>
+        </div>
+      </div>
+
+      <div class="status-item" id="dbsync-status">
+        <span class="status-name">Local DB</span>
+        <div class="status-indicator">
+          <div class="spinner"></div>
+          <span class="status-text">loading...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-details" id="error-details">
+      <div class="error-title">Startup Failed</div>
+      <div id="error-message"></div>
+      <button class="retry-button" onclick="window.electronAPI.retryStartup()">Retry</button>
+    </div>
+  </div>
+
+  <!-- Wrench button: bottom-left corner -->
+  <button class="wrench-btn" id="wrench-btn" title="Show logs" onclick="toggleLogs()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+    </svg>
+  </button>
+
+  <!-- Full-screen log overlay -->
+  <div class="log-overlay" id="log-overlay">
+    <div class="log-overlay-header">
+      <span class="log-overlay-title">STARTUP LOGS</span>
+      <button class="log-close-btn" onclick="toggleLogs()">✕</button>
+    </div>
+    <div class="logs-container" id="logs-container"></div>
+  </div>
+
+  <script>
+    const logsContainer = document.getElementById('logs-container')
+    const logOverlay = document.getElementById('log-overlay')
+    const maxLogs = 200
+    let logPollIndex = 0
+    let pollTimer = null
+
+    function toggleLogs() {
+      logOverlay.classList.toggle('show')
+      if (logOverlay.classList.contains('show')) {
+        logsContainer.scrollTop = logsContainer.scrollHeight
+      }
+    }
+
+    function addLog(service, message) {
+      const ts = new Date().toISOString().substring(11, 23)
+      const logEntry = document.createElement('div')
+      logEntry.className = `log-entry ${service}`
+      logEntry.textContent = `${ts} [${service.toUpperCase()}] ${message}`
+      logsContainer.appendChild(logEntry)
+      while (logsContainer.children.length > maxLogs) {
+        logsContainer.removeChild(logsContainer.firstChild)
+      }
+      if (logOverlay.classList.contains('show')) {
+        logsContainer.scrollTop = logsContainer.scrollHeight
+      }
+    }
+
+    function updateStatus(service, state, message, error) {
+      const el = document.getElementById(`${service}-status`)
+      if (!el) return
+      const indicator = el.querySelector('.status-indicator')
+      if (state === 'starting') {
+        indicator.innerHTML = `<div class="spinner"></div><span class="status-text">${message || 'starting...'}</span>`
+      } else if (state === 'success') {
+        indicator.innerHTML = `<span class="status-text status-success">✓ ${message || 'ready'}</span>`
+      } else if (state === 'error') {
+        indicator.innerHTML = `<span class="status-text status-error">✗ ${message || 'failed'}</span>`
+        const errorDetails = document.getElementById('error-details')
+        const errorMessage = document.getElementById('error-message')
+        errorMessage.textContent = error || 'unknown error'
+        errorDetails.classList.add('show')
+        logOverlay.classList.add('show')
+        logsContainer.scrollTop = logsContainer.scrollHeight
+      }
+    }
+
+    // Poll main process for buffered logs (works even if IPC push fails)
+    let pollCount = 0
+    async function pollLogs() {
+      try {
+        if (!window.electronAPI || !window.electronAPI.getStartupLogs) {
+          return
+        }
+        const result = await window.electronAPI.getStartupLogs(logPollIndex)
+        pollCount++
+        // Show poll diagnostics for first few polls
+        if (pollCount <= 3) {
+          addLog('system', `Poll #${pollCount}: total=${result ? result.total : 'null'}, new=${result && result.logs ? result.logs.length : 0}`)
+        }
+        if (result && result.logs && result.logs.length > 0) {
+          for (const entry of result.logs) {
+            if (entry.type === 'log') {
+              addLog(entry.service, entry.message)
+            } else if (entry.type === 'status') {
+              updateStatus(entry.service, entry.state, entry.message, entry.error)
+            }
+          }
+          logPollIndex = result.total
+        }
+      } catch (e) {
+        pollCount++
+        if (pollCount <= 3) {
+          addLog('error', `Poll error: ${e.message}`)
+        }
+      }
+    }
+
+    function initializeListeners() {
+      if (!window.electronAPI) {
+        addLog('error', 'electronAPI not available, retrying...')
+        setTimeout(initializeListeners, 200)
+        return
+      }
+
+      addLog('system', 'Splash screen initialized')
+      addLog('system', 'electronAPI keys: ' + Object.keys(window.electronAPI).join(', '))
+
+      // Still register push listeners as backup
+      if (window.electronAPI.onLog) {
+        window.electronAPI.onLog((log) => addLog(log.service, log.message))
+      }
+      if (window.electronAPI.onStartupStatus) {
+        window.electronAPI.onStartupStatus((status) => {
+          updateStatus(status.service, status.state, status.message, status.error)
+        })
+      }
+
+      // Signal main process
+      if (window.electronAPI.splashReady) {
+        window.electronAPI.splashReady()
+      }
+
+      // Start polling for logs from main process buffer
+      pollTimer = setInterval(pollLogs, 500)
+      // Also do an immediate poll
+      pollLogs()
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initializeListeners)
+    } else {
+      initializeListeners()
+    }
+
+    // canvas animation
+    const canvas = document.getElementById('chaosCanvas');
+    const ctx = canvas.getContext('2d');
+
+    let width, height;
+
+    // Responsive canvas size adjustment
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    // Color palette: High saturation warm/cool color collision creates strong bleeding effect (高彩度の暖色と寒色の衝突で強い滲み効果を生成)
+    const colors = [
+      '#ff2a5f', // Bright magenta
+      '#00f0ff', // Cyan
+      '#7000ff', // Deep purple
+      '#ff9000', // Orange
+      '#00ff88', // Fluorescent green
+      '#ff0088'  // Rose red
+    ];
+
+    // Define ColorBlob class
+    class ColorBlob {
+      constructor(color) {
+        this.color = color;
+        this.baseRadius = Math.max(width, height) * (0.3 + Math.random() * 0.3);
+
+        this.timeOffset = Math.random() * 100000; 
+
+        this.speedX = 0.0002 + Math.random() * 0.0002;
+        this.speedY = 0.0002 + Math.random() * 0.0002;
+
+        this.rangeX = width * 0.4;
+        this.rangeY = height * 0.4;
+
+        this.update(0); 
+      }
+
+      update(time) {
+        const t = time + this.timeOffset;
+
+        this.x = width / 2 + 
+                Math.sin(t * this.speedX) * this.rangeX + 
+                Math.sin(t * this.speedX * 1.5) * (this.rangeX * 0.3);
+                
+        this.y = height / 2 + 
+                Math.cos(t * this.speedY) * this.rangeY + 
+                Math.cos(t * this.speedY * 1.3) * (this.rangeY * 0.3);
+
+        this.radius = this.baseRadius + Math.sin(t * 0.001) * (this.baseRadius * 0.2);
+      }
+
+      draw(ctx) {
+        // Draw radial gradient: opaque center, fully transparent edges (放射状グラデーション：中心は不透明、縁は完全透明)
+        const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+        gradient.addColorStop(0, this.color + 'ff');  // Center 100% opaque
+        gradient.addColorStop(0.5, this.color + '80'); // Middle 50% opacity
+        gradient.addColorStop(1, this.color + '00');   // Edge 0% fully transparent
+
+        ctx.beginPath();
+        ctx.fillStyle = gradient;
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Initialize blob array (ブロブ配列を初期化)
+    const blobs = [];
+    for (let i = 0; i < 8; i++) {
+      blobs.push(new ColorBlob(colors[i % colors.length]));
+    }
+
+    // Main animation loop (メインアニメーションループ)
+    function animate(time) {
+      ctx.clearRect(0, 0, width, height);
+
+      // Key: Blend mode
+      // 'screen' or 'lighter' makes overlapping colors glow, creating optical mixing fantasy effect (スクリーンモードで色の重なりが発光し、光学的混合の幻想的効果を生成)
+      ctx.globalCompositeOperation = 'screen';
+
+      for (const blob of blobs) {
+        blob.update(time);
+        blob.draw(ctx);
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    // Start animation (アニメーション開始)
+    requestAnimationFrame(animate);
+  </script>
+</body>
+
+</html>

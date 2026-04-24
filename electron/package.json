@@ -1,0 +1,104 @@
+{
+  "name": "redpill-electron",
+  "version": "0.4.1",
+  "type": "module",
+  "description": "RedPill Desktop Application",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:mac-arm64": "electron-builder --mac --arm64",
+    "build:mac-x64": "electron-builder --mac --x64",
+    "build:win-x64": "electron-builder --win --x64",
+    "build:linux-x64": "electron-builder --linux --x64",
+    "build:all": "electron-builder --mac --win --linux"
+  },
+  "build": {
+    "appId": "com.ipfs.webui",
+    "productName": "RedPill",
+    "artifactName": "${productName}-${platform}-v${version}.${ext}",
+    "directories": {
+      "output": "../release"
+    },
+    "files": [
+      "main.js",
+      "preload.cjs",
+      "splash.html",
+      "assets/icon.png",
+      "assets/icon.ico",
+      "../dist/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.icns",
+      "artifactName": "${productName}-MacArm64-v${version}.${ext}",
+      "extraFiles": [
+        {
+          "from": "../kubo/darwin-arm64",
+          "to": "Resources/kubo/darwin-arm64",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico",
+      "artifactName": "${productName}-WinX64-v${version}.${ext}",
+      "extraFiles": [
+        {
+          "from": "../kubo/windows-amd64",
+          "to": "Resources/kubo/windows-amd64",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png",
+      "category": "Development",
+      "artifactName": "${productName}-LinuxX64-v${version}.${ext}",
+      "extraFiles": [
+        {
+          "from": "../kubo/linux-amd64",
+          "to": "Resources/kubo/linux-amd64",
+          "filter": [
+            "**/*"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^39.5.1",
+    "electron-builder": "^26.7.0"
+  }
+}
