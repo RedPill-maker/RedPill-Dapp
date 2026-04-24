@@ -1,7 +1,7 @@
 # <p align="center"><img width="64" alt="RedPill_logo" src="https://github.com/user-attachments/assets/e49f1210-6956-4c47-9b06-2c33032f6d07" /><p align="center">RedPill</p>
 </p>
 
-> **Decentralized Content Publishing. Truly Data Sovereign.**
+> **Decentralized Content Publishing. Truly Data Sovereign. Currently in beta version.**
 
 Decentralized content platform built on IPFS and Filecoin Onchain Cloud. Creators publish, monetize, and manage content through a video-platform-inspired interface.
 
