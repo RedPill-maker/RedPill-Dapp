@@ -46,15 +46,6 @@
     },
     "copy": "Copier"
   },
-  "languages": {
-    "zh-CN": "简体中文",
-    "zh-TW": "繁體中文",
-    "en-US": "English",
-    "ja-JP": "日本語",
-    "ko-KR": "한국어",
-    "es-ES": "Español",
-    "fr-FR": "Français"
-  },
   "update": {
     "checkingUpdate": "Recherche de mises à jour...",
     "checkUpdate": "Vérifier les mises à jour",

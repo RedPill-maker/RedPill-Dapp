@@ -46,14 +46,6 @@
     },
     "copy": "複製"
   },
-  "languages": {
-    "zh-CN": "簡體中文",
-    "zh-TW": "繁體中文",
-    "en-US": "English",
-    "ja-JP": "日本語",
-    "ko-KR": "한국어",
-    "es-ES": "Español"
-  },
   "update": {
     "checkingUpdate": "正在檢查更新...",
     "checkUpdate": "檢查更新",

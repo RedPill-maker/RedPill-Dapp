@@ -1,10 +1,9 @@
 # <p align="center"><img width="64" alt="RedPill_logo" src="https://github.com/user-attachments/assets/e49f1210-6956-4c47-9b06-2c33032f6d07" /><p align="center">RedPill</p>
 </p>
 
-
 > **Decentralized Content Publishing. Truly Data Sovereign.**
 
-Decentralized content platform built on IPFS and Filecoin. Creators publish, monetize, and manage content through a video-platform-inspired interface.
+Decentralized content platform built on IPFS and Filecoin Onchain Cloud. Creators publish, monetize, and manage content through a video-platform-inspired interface.
 
 ## Features
 
@@ -13,8 +12,6 @@ Decentralized content platform built on IPFS and Filecoin. Creators publish, mon
 - Filecoin wallet supporting both 0x and f410/t410 address formats
 - USDFC stablecoin integration (Secured Finance protocol)
 - Embedded IPFS Kubo node (desktop app)
-- Multi-network support: Mainnet, Calibration Testnet, Local Testnet
-- CreatorHub & AdSpace smart contract integration
 - Multi-language support (en-US, zh-CN, zh-TW, ja-JP, ko-KR, es-ES)
 
 ## Architecture
@@ -41,9 +38,32 @@ This project depends on `@secured-finance` packages hosted on GitHub Packages. B
 
 ```bash
 npm install          # Install dependencies
+### Build Desktop App
+### You can choose to build the system version you need
+npm run build:app-mac-arm64   # macOS ARM64
+npm run build:app-mac-x64     # macOS Intel
+npm run build:app-win-x64     # Windows x64
+npm run build:app-linux-x64   # Linux x64
+### Optional action
+npm run verify:app            # Verify packaged app
+```
+
+### 3. Run development environment
+
+``` bash
+## You need to start the following three processes
+## 1. React WebUI process
 npm run dev          # Start dev server (port 3000)
-npm run db:sync      # Sync blockchain events to database
-npm run db:server    # Start database API server
+
+## 2. Synchronize database server
+npm run db:server    # Start Sync blockchain events & database API server
+
+## 3. IPFS Node
+## Choose to run the corresponding system version of Kubo (IPFS Node)
+cd ./kubo/<System version dir>/
+daemon ./ipfs
+## Or you can also run Kubo independently on your local computer, 
+## see the link: https://github.com/ipfs/kubo
 ```
 
 ## Project Structure
@@ -87,44 +107,11 @@ kubo/                        # IPFS Kubo binaries (multi-platform)
 docs/                        # Documentation
 ```
 
-## npm Commands
-
-### Development
-```bash
-npm run dev              # Vite dev server (port 3000)
-npm run db:sync          # Sync blockchain events
-npm run db:server        # Database API server
-```
-
-### Build
-```bash
-npm run build            # Build web app
-npm run preview          # Preview build
-npm run clean            # Clean dist
-npm run clean:all        # Clean all build artifacts
-```
-
-### Code Quality
-```bash
-npm run lint             # ESLint
-npm run lint:fix         # Auto-fix
-npm run format           # Prettier
-npm run type-check       # TypeScript check
-```
-
-### Desktop App
-```bash
-npm run build:app-mac-arm64   # macOS ARM64
-npm run build:app-mac-x64     # macOS Intel
-npm run build:app-win-x64     # Windows x64
-npm run build:app-linux-x64   # Linux x64
-npm run verify:app            # Verify packaged app
-```
-
 ## Technology Stack
 
 | Category | Technology |
 |----------|-----------|
+| Node.js | v22+ |
 | Frontend | React 19 + TypeScript |
 | State | Redux Toolkit |
 | Styling | Tailwind CSS 3.4 |

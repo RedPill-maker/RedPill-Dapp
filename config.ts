@@ -343,7 +343,7 @@ export const SUPPORTED_LANGUAGES: LanguageConfig[] = [
   {
     code: 'es-ES',
     name: 'Spanish',
-    nativeName: 'español'
+    nativeName: 'Español'
   },
   {
     code: 'ru-RU',

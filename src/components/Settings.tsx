@@ -559,7 +559,7 @@ const Settings: React.FC = () => {
               >
                 {SUPPORTED_LANGUAGES.map((lang) => (
                   <option key={lang.code} value={lang.code}>
-                    {t(`languages.${lang.code}`)}
+                    {lang.nativeName}
                   </option>
                 ))}
               </select>
