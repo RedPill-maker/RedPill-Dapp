@@ -373,7 +373,9 @@
     "tipSuccessWithComment": "Чаевые успешно отправлены",
     "commentSyncPending": "Ваш комментарий появится после синхронизации сети (может занять несколько минут)",
     "cidCopied": "CID работы скопирован",
-    "commentTooLong": "Комментарий не может превышать {{max}} символов"
+    "commentTooLong": "Комментарий не может превышать {{max}} символов",
+    "videoLoadFailed": "Ne udalos zagrozit video",
+    "clickToRetry": "Nazhite dlya povtora"
   },
   "ipfsStatus": {
     "neverUpdated": "Никогда не обновлялось",

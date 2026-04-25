@@ -373,7 +373,9 @@
     "tipSuccessWithComment": "Trinkgeld erfolgreich gesendet",
     "commentSyncPending": "Ihr Kommentar erscheint nach der Netzwerk-Synchronisierung (kann einige Minuten dauern)",
     "cidCopied": "Werks-CID kopiert",
-    "commentTooLong": "Kommentar darf {{max}} Zeichen nicht überschreiten"
+    "commentTooLong": "Kommentar darf {{max}} Zeichen nicht überschreiten",
+    "videoLoadFailed": "Video konnte nicht geladen werden",
+    "clickToRetry": "Zum Wiederholen klicken"
   },
   "ipfsStatus": {
     "neverUpdated": "Nie aktualisiert",

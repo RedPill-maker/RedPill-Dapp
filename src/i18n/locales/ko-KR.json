@@ -350,7 +350,9 @@
     "tipWork": "작품 후원:",
     "tipFailed": "후원 실패",
     "cidCopied": "작품 CID가 클립보드에 복사되었습니다",
-    "commentTooLong": "댓글은 {{max}}자를 초과할 수 없습니다"
+    "commentTooLong": "댓글은 {{max}}자를 초과할 수 없습니다",
+    "videoLoadFailed": "동영상 로드 실패",
+    "clickToRetry": "클릭하여 재시도"
   },
   "ipfsStatus": {
     "neverUpdated": "업데이트 기록 없음",

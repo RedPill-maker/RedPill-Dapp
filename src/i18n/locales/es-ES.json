@@ -350,7 +350,9 @@
     "tipWork": "Dar propina:",
     "tipFailed": "Error en la propina",
     "cidCopied": "CID de la obra copiado al portapapeles",
-    "commentTooLong": "El comentario no puede exceder los {{max}} caracteres"
+    "commentTooLong": "El comentario no puede exceder los {{max}} caracteres",
+    "videoLoadFailed": "Error al cargar el video",
+    "clickToRetry": "Haz clic para reintentar"
   },
   "ipfsStatus": {
     "neverUpdated": "Nunca actualizado",

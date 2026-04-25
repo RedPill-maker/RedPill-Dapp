@@ -335,6 +335,8 @@
     "loadFailed": "Failed to load content",
     "videoNotSupported": "Your browser does not support video playback",
     "audioNotSupported": "Your browser does not support audio playback",
+    "videoLoadFailed": "Video failed to load",
+    "clickToRetry": "Click to retry",
     "clickDownload": "This file was uploaded directly by the creator and has not been verified by any third party. Download at your own risk — be especially cautious with executable files such as .exe, .bin, .bat, .sh, .dmg, or .pkg.",
     "downloadFile": "Download File",
     "favorite": "Favorite",

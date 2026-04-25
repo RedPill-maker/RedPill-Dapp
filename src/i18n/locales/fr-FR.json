@@ -373,7 +373,9 @@
     "tipSuccessWithComment": "Pourboire envoyé avec succès",
     "commentSyncPending": "Votre commentaire apparaîtra après synchronisation (quelques minutes)",
     "cidCopied": "CID de l'œuvre copié",
-    "commentTooLong": "Le commentaire ne peut pas dépasser {{max}} caractères"
+    "commentTooLong": "Le commentaire ne peut pas dépasser {{max}} caractères",
+    "videoLoadFailed": "Echec du chargement de la video",
+    "clickToRetry": "Cliquer pour reessayer"
   },
   "ipfsStatus": {
     "neverUpdated": "Jamais mis à jour",

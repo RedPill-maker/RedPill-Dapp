@@ -329,6 +329,8 @@
     "loadFailed": "コンテンツの読み込みに失敗しました",
     "videoNotSupported": "お使いのブラウザは動画再生をサポートしていません",
     "audioNotSupported": "お使いのブラウザは音声再生をサポートしていません",
+    "videoLoadFailed": "動画の読み込みに失敗しました",
+    "clickToRetry": "クリックして再試行",
     "clickDownload": "このファイルはクリエイターが直接アップロードしたものであり、第三者によるセキュリティ検証は行われていません。ダウンロードは自己責任で行ってください。特に .exe、.bin、.bat、.sh、.dmg、.pkg などの実行可能ファイルにはご注意ください。",
     "downloadFile": "ファイルをダウンロード",
     "favorite": "お気に入り",

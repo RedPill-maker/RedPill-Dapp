@@ -335,6 +335,8 @@
     "loadFailed": "載入內容失敗",
     "videoNotSupported": "您的瀏覽器不支援影片播放",
     "audioNotSupported": "您的瀏覽器不支援音訊播放",
+    "videoLoadFailed": "影片載入失敗",
+    "clickToRetry": "點擊重試",
     "clickDownload": "此檔案由創作者直接上傳，未經第三方驗證。下載檔案需自擔風險 —— 處理可執行檔案（如 .exe, .bin, .bat, .sh, .dmg, .pkg 等）時請格外小心。",
     "downloadFile": "下載檔案",
     "favorite": "收藏",

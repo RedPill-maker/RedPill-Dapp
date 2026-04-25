@@ -27,6 +27,8 @@ import { StarIcon } from '@heroicons/react/24/outline'
 import LoadingSpinner from '../LoadingSpinner'
 import MarkdownRenderer from '../MarkdownRenderer'
 import BoringAvatar from '../BoringAvatar'
+import VideoPlayer from './VideoPlayer'
+import AudioPlayer from './AudioPlayer'
 import ItemCard, { ItemCardData } from './ItemCard'
 import SidebarAds from '../ads/SidebarAds'
 import { adsMgr } from '../../utils/adsMgr'
@@ -95,7 +97,6 @@ const ItemPage: React.FC<ItemPageProps> = ({ item, itemCid }) => {
   const [repliesMap, setRepliesMap] = useState<Record<string, TipRecord[]>>({})
   const TIP_PAGE_SIZE = 10
   const [dbLoaded, setDbLoaded] = useState(false)
-  const [imageError, setImageError] = useState(false)
   const [showTipSetup, setShowTipSetup] = useState(false)
   const [showTipModal, setShowTipModal] = useState(false)
   const [selectedTipToken, setSelectedTipToken] = useState(getKnownTokens()[0])
@@ -433,14 +434,43 @@ const ItemPage: React.FC<ItemPageProps> = ({ item, itemCid }) => {
   }
 
   const renderContent = () => {
-    if (loading) return <div className="flex items-center justify-center py-12"><LoadingSpinner /><span className="ml-3 text-gray-600 dark:text-gray-400">{t('common.loading')}</span></div>
-    if (error) return <div className="text-center py-12"><XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" /><p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p><button onClick={loadContent} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{t('common.retry')}</button></div>
+    // For video and audio, render the player immediately (no loading gate)
+    // so the player UI is always visible regardless of IPFS load speed
     const gw = ipfsConnector.getGatewayUrl(cid)
     switch (type) {
-      case 1: return <video controls className="w-full max-h-[75vh] bg-black rounded-xl" poster={imgCid ? ipfsConnector.getGatewayUrl(imgCid) : undefined}><source src={gw} type="video/mp4" />{t('itemPage.videoNotSupported')}</video>
-      case 2: return (<div>{imgCid && <div className="mb-4 flex justify-center"><div className="w-full max-w-sm aspect-square rounded-lg overflow-hidden">{!imageError ? <img src={ipfsConnector.getGatewayUrl(imgCid)} alt={title} className="w-full h-full object-cover" onError={() => setImageError(true)} /> : <BoringAvatar hash={cid} variant="marble" />}</div></div>}<audio controls className="w-full h-12"><source src={gw} type="audio/mpeg" />{t('itemPage.audioNotSupported')}</audio></div>)
-      case 3: return <div className="prose dark:prose-invert max-w-none"><MarkdownRenderer content={content || ''} /></div>
-      default: return (<div className="text-center py-12"><div className="mb-6 flex justify-center">{getFileTypeIcon(type)}</div><div className="mb-6 mx-auto max-w-md rounded-lg border border-yellow-300 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/20 px-4 py-3 flex gap-3 text-left"><ExclamationTriangleIcon className="w-5 h-5 flex-shrink-0 text-yellow-500 mt-0.5" /><p className="text-sm text-yellow-800 dark:text-yellow-300">{t('itemPage.clickDownload')}</p></div><button onClick={handleDownload} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center mx-auto"><ArrowDownTrayIcon className="w-5 h-5 mr-2" />{t('itemPage.downloadFile')}</button></div>)
+      case 1:
+        return (
+          <VideoPlayer
+            src={gw}
+            poster={imgCid ? ipfsConnector.getGatewayUrl(imgCid) : undefined}
+          />
+        )
+      case 2:
+        return (
+          <AudioPlayer
+            src={gw}
+            imgUrl={imgCid ? ipfsConnector.getGatewayUrl(imgCid) : undefined}
+            fallbackHash={cid}
+            title={title}
+          />
+        )
+      case 3:
+        if (loading) return <div className="flex items-center justify-center py-12"><LoadingSpinner /><span className="ml-3 text-gray-600 dark:text-gray-400">{t('common.loading')}</span></div>
+        if (error) return <div className="text-center py-12"><XCircleIcon className="w-16 h-16 text-red-500 mx-auto mb-4" /><p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p><button onClick={loadContent} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{t('common.retry')}</button></div>
+        return <div className="prose dark:prose-invert max-w-none p-4"><MarkdownRenderer content={content || ''} /></div>
+      default:
+        return (
+          <div className="text-center py-12">
+            <div className="mb-6 flex justify-center">{getFileTypeIcon(type)}</div>
+            <div className="mb-6 mx-auto max-w-md rounded-lg border border-yellow-300 bg-yellow-50 dark:border-yellow-700 dark:bg-yellow-900/20 px-4 py-3 flex gap-3 text-left">
+              <ExclamationTriangleIcon className="w-5 h-5 flex-shrink-0 text-yellow-500 mt-0.5" />
+              <p className="text-sm text-yellow-800 dark:text-yellow-300">{t('itemPage.clickDownload')}</p>
+            </div>
+            <button onClick={handleDownload} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center mx-auto">
+              <ArrowDownTrayIcon className="w-5 h-5 mr-2" />{t('itemPage.downloadFile')}
+            </button>
+          </div>
+        )
     }
   }
 
@@ -453,7 +483,7 @@ const ItemPage: React.FC<ItemPageProps> = ({ item, itemCid }) => {
         <div className="flex flex-col xl:flex-row gap-6">
           {/* ====== Left main content area ====== / ====== 左側メインコンテンツエリア ====== */}
           <div className="flex-1 min-w-0">
-            <div className="bg-black rounded-xl overflow-hidden mb-4">{renderContent()}</div>
+            <div className={`rounded-xl overflow-hidden mb-4 ${type === 1 || type === 2 ? 'bg-black' : ''}`}>{renderContent()}</div>
             <h1 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 leading-tight">{title || t('common.loading')}</h1>
             {/* Meta info + action buttons / メタ情報 + アクションボタン */}
             <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
